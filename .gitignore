@@ -1,0 +1,16 @@
+**/.idea
+
+**/node_modules
+**/bower_components
+**/.tmp
+**/.dist
+**/.sass-cache
+
+**/.settings
+**/.project
+**/.classpath
+**/.metadata
+**/Servers
+**/RemoteSystemsTempFiles
+
+**/target/*
