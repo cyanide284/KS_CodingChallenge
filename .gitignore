@@ -6,6 +6,7 @@
 **/.dist
 **/.sass-cache
 
+**/bin
 **/.settings
 **/.project
 **/.classpath
