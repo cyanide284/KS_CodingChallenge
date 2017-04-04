@@ -4,7 +4,7 @@ public interface JavaScriptLintInterface {
 	
 	public void findUnusedVariables();
 	
-	public void findSingleLinedConditionals();
+	public void findSingleLinedConditionals(String fileName);
 	
 	public void findUndeclaredFunctions();
 	
