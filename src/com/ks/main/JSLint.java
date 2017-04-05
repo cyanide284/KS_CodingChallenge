@@ -8,6 +8,9 @@ public class JSLint {
 		String fileName = args[0];
 		JavaScriptLintImpl jsLint = new JavaScriptLintImpl();
 		jsLint.findSingleLinedConditionals(fileName);
+		jsLint.findUnbalancedBraces(fileName);
+		jsLint.findUnusedVariables(fileName);
+		jsLint.findUndeclaredFunctions(fileName);
 	}
 
 }
