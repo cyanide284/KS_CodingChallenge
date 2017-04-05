@@ -9,10 +9,44 @@ import com.ks.parser.JavaScriptParser;
 
 public class JavaScriptLintImpl implements JavaScriptLintInterface {
 
+	// method to detect unused variables
 	@Override
 	public void findUnusedVariables(String fileName) {
-		// TODO Auto-generated method stub
 
+		HashMap<String, Integer> variables = new HashMap<String, Integer>();
+		HashMap<Integer, String> parsedJS = new JavaScriptParser().readFile(fileName);
+		// Using entrySet as HashMap does not have an iterator
+		Iterator iter = parsedJS.entrySet().iterator();
+
+		while (iter.hasNext()) {
+			Map.Entry pair = (Map.Entry) iter.next();
+			String currentLine = pair.getValue().toString();
+			if (!currentLine.contains("function")
+					&& (currentLine.contains("var") || currentLine.contains("const") || currentLine.contains("let"))) {
+				if (currentLine.trim().substring(0, 3).equals("var") || currentLine.trim().substring(0, 3).equals("let")
+						|| currentLine.trim().substring(0, 5).equals("const")) {
+					String substr[] = currentLine.split(" ");
+					for (String s : substr) {
+						if (s.contains("=")) {
+							String subsubstr[] = s.split("=");
+							variables.put(subsubstr[0], 1);
+						} else {
+							variables.put(substr[1], 1);
+						}
+					}
+
+				}
+
+			}
+
+		}
+
+		Iterator iter2 = variables.entrySet().iterator();
+		while (iter2.hasNext()) {
+			Map.Entry pair = (Map.Entry) iter2.next();
+			System.out.println(pair.getKey()  + " " + pair.getValue());
+
+		}
 	}
 
 	// Method to find single-lined if else statements not enclosed in a code
@@ -28,8 +62,8 @@ public class JavaScriptLintImpl implements JavaScriptLintInterface {
 			Map.Entry pair = (Map.Entry) iter.next();
 			String currentLine = pair.getValue().toString();
 			if (currentLine.contains("if") || currentLine.contains("else")) {
-				if (currentLine.trim().substring(0, 2).equalsIgnoreCase("if")
-						|| currentLine.trim().substring(0, 4).equalsIgnoreCase("else")) {
+				if (currentLine.trim().substring(0, 2).equals("if")
+						|| currentLine.trim().substring(0, 4).equals("else")) {
 					System.out.println(pair.getKey() + "." + " " + pair.getValue());
 				}
 			}
@@ -69,8 +103,8 @@ public class JavaScriptLintImpl implements JavaScriptLintInterface {
 			}
 
 		}
-		if(!stack.empty()){
-			System.out.println("Extra curly bracket");
+		if (!stack.empty()) {
+			System.out.println("Missing curly bracket");
 		}
 
 	}
