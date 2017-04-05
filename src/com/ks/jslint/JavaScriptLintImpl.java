@@ -9,23 +9,22 @@ import com.ks.parser.JavaScriptParser;
 
 public class JavaScriptLintImpl implements JavaScriptLintInterface {
 
-	// method to detect unused variables
+	// method to detect all declared variables
 	@Override
-	public void findUnusedVariables(String fileName) {
-		
-		//data structure for storing declared variables
-		HashMap<String, Integer> variables = new HashMap<String, Integer>();
-		
+	public HashMap<String, String> detectVariables(String fileName) {
+		// data structure for storing declared variables
+		HashMap<String, String> variables = new HashMap<String, String>();
+
 		HashMap<Integer, String> parsedJS = new JavaScriptParser().readFile(fileName);
 		// Using entrySet as HashMap does not have an iterator
 		Iterator iter = parsedJS.entrySet().iterator();
-		
-		//parsing the code to detect and store declared variables 
+
+		// parsing the code to detect and store declared variables
 		while (iter.hasNext()) {
-			
+
 			Map.Entry pair = (Map.Entry) iter.next();
 			String currentLine = pair.getValue().toString();
-			
+
 			if (!currentLine.contains("function")
 					&& (currentLine.contains("var") || currentLine.contains("const") || currentLine.contains("let"))) {
 				if (currentLine.trim().substring(0, 3).equals("var") || currentLine.trim().substring(0, 3).equals("let")
@@ -35,26 +34,26 @@ public class JavaScriptLintImpl implements JavaScriptLintInterface {
 						if (!s.equals("var")) {
 							if (s.contains("=")) {
 								String subsubstr[] = s.split("=");
-								variables.put(subsubstr[0], 1);
+								variables.put(pair.getKey().toString(),subsubstr[0]);
 								break;
 							} else if (s.contains(";")) {
 								String subsubstr[] = s.split(";");
-								variables.put(subsubstr[0], 1);
+								variables.put(pair.getKey().toString(),subsubstr[0]);
 								break;
 							} else {
-								variables.put(substr[1], 1);
+								variables.put(pair.getKey().toString(), substr[1]);
 								break;
 							}
 
 						}
-						
-					} //end of for loop 
-					
-				} //end of if to detect var,let,const
 
-			} //end of outermost if
+					} // end of for loop
 
-		}//end of iterating over entryset
+				} // end of if to detect var,let,const
+
+			} // end of outermost if
+
+		} // end of iterating over entryset
 
 		Iterator iter2 = variables.entrySet().iterator();
 		while (iter2.hasNext()) {
@@ -62,6 +61,12 @@ public class JavaScriptLintImpl implements JavaScriptLintInterface {
 			System.out.println(pair.getKey() + " " + pair.getValue());
 
 		}
+		return variables;
+	}
+
+	@Override
+	public void findUnusedVariables(String fileName, HashMap<String, String> variables) {
+
 	}
 
 	// Method to find single-lined if else statements not enclosed in a code
