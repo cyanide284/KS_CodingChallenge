@@ -7,11 +7,13 @@ import java.util.HashMap;
 
 public class JavaScriptParser {
 	
+	//Method to read the JS file line-by-line and store it in a HashMap with lineNumber as key and code as value
 	public HashMap<Integer,String> readFile(String FILENAME) {
 
 		BufferedReader br = null;
 		FileReader fr = null;
 		
+		//Hashmap to store the parsed javascript
 		HashMap<Integer, String> parsedJS = new HashMap<Integer, String>();
 
 		try {
