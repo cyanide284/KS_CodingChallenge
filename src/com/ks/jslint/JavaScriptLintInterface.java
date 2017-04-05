@@ -2,12 +2,12 @@ package com.ks.jslint;
 
 public interface JavaScriptLintInterface {
 	
-	public void findUnusedVariables();
+	public void findUnusedVariables(String fileName);
 	
 	public void findSingleLinedConditionals(String fileName);
 	
-	public void findUndeclaredFunctions();
+	public void findUndeclaredFunctions(String fileName);
 	
-	public void findUnbalancedBraces();	
+	public void findUnbalancedBraces(String fileName);	
 
 }
