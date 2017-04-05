@@ -12,43 +12,54 @@ public class JavaScriptLintImpl implements JavaScriptLintInterface {
 	// method to detect unused variables
 	@Override
 	public void findUnusedVariables(String fileName) {
-
+		
+		//data structure for storing declared variables
 		HashMap<String, Integer> variables = new HashMap<String, Integer>();
+		
 		HashMap<Integer, String> parsedJS = new JavaScriptParser().readFile(fileName);
 		// Using entrySet as HashMap does not have an iterator
 		Iterator iter = parsedJS.entrySet().iterator();
-
+		
+		//parsing the code to detect and store declared variables 
 		while (iter.hasNext()) {
+			
 			Map.Entry pair = (Map.Entry) iter.next();
 			String currentLine = pair.getValue().toString();
+			
 			if (!currentLine.contains("function")
 					&& (currentLine.contains("var") || currentLine.contains("const") || currentLine.contains("let"))) {
 				if (currentLine.trim().substring(0, 3).equals("var") || currentLine.trim().substring(0, 3).equals("let")
 						|| currentLine.trim().substring(0, 5).equals("const")) {
 					String substr[] = currentLine.trim().split(" ");
 					for (String s : substr) {
-						if(!s.equals("var")){
-							if(s.contains("=")){
+						if (!s.equals("var")) {
+							if (s.contains("=")) {
 								String subsubstr[] = s.split("=");
 								variables.put(subsubstr[0], 1);
 								break;
-							}else{
+							} else if (s.contains(";")) {
+								String subsubstr[] = s.split(";");
+								variables.put(subsubstr[0], 1);
+								break;
+							} else {
 								variables.put(substr[1], 1);
 								break;
 							}
+
 						}
-					}
+						
+					} //end of for loop 
+					
+				} //end of if to detect var,let,const
 
-				}
+			} //end of outermost if
 
-			}
-
-		}
+		}//end of iterating over entryset
 
 		Iterator iter2 = variables.entrySet().iterator();
 		while (iter2.hasNext()) {
 			Map.Entry pair = (Map.Entry) iter2.next();
-			System.out.println(pair.getKey()  + " " + pair.getValue());
+			System.out.println(pair.getKey() + " " + pair.getValue());
 
 		}
 	}
