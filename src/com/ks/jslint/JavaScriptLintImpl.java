@@ -9,7 +9,7 @@ import com.ks.parser.JavaScriptParser;
 public class JavaScriptLintImpl implements JavaScriptLintInterface {
 
 	@Override
-	public void findUnusedVariables() {
+	public void findUnusedVariables(String fileName) {
 		// TODO Auto-generated method stub
 
 	}
@@ -32,14 +32,20 @@ public class JavaScriptLintImpl implements JavaScriptLintInterface {
 	}
 
 	@Override
-	public void findUndeclaredFunctions() {
+	public void findUndeclaredFunctions(String fileName) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void findUnbalancedBraces() {
-		// TODO Auto-generated method stub
+	public void findUnbalancedBraces(String fileName) {
+		HashMap<Integer, String> parsedJS = new JavaScriptParser().readFile(fileName);
+		Iterator iter = parsedJS.entrySet().iterator();
+
+		while (iter.hasNext()) {
+			Map.Entry pair = (Map.Entry) iter.next();
+			String currentLine = pair.getValue().toString();
+		}
 
 	}
 
