@@ -25,13 +25,17 @@ public class JavaScriptLintImpl implements JavaScriptLintInterface {
 					&& (currentLine.contains("var") || currentLine.contains("const") || currentLine.contains("let"))) {
 				if (currentLine.trim().substring(0, 3).equals("var") || currentLine.trim().substring(0, 3).equals("let")
 						|| currentLine.trim().substring(0, 5).equals("const")) {
-					String substr[] = currentLine.split(" ");
+					String substr[] = currentLine.trim().split(" ");
 					for (String s : substr) {
-						if (s.contains("=")) {
-							String subsubstr[] = s.split("=");
-							variables.put(subsubstr[0], 1);
-						} else {
-							variables.put(substr[1], 1);
+						if(!s.equals("var")){
+							if(s.contains("=")){
+								String subsubstr[] = s.split("=");
+								variables.put(subsubstr[0], 1);
+								break;
+							}else{
+								variables.put(substr[1], 1);
+								break;
+							}
 						}
 					}
 
