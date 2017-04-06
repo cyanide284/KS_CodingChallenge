@@ -164,12 +164,6 @@ public class JavaScriptLintImpl implements JavaScriptLintInterface {
 
 		}
 
-		Iterator iter2 = calledFunctions.entrySet().iterator();
-		while (iter2.hasNext()) {
-			Map.Entry pair = (Map.Entry) iter2.next();
-			System.out.println(pair.getKey() + " " + pair.getValue());
-		}
-
 	}
 
 	// Method to find unbalanced or missing braces
