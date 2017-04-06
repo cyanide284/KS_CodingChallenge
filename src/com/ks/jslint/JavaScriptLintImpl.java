@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Stack;
+import java.util.regex.Pattern;
 
 import com.ks.parser.JavaScriptParser;
 
@@ -106,6 +107,8 @@ public class JavaScriptLintImpl implements JavaScriptLintInterface {
 		HashMap<Integer, String> parsedJS = new JavaScriptParser().readFile(fileName);
 		//data structure to store declared functions
 		HashMap<String, String> declaredFunctions = new HashMap<String, String>();
+		//data structure to store called functions
+		HashMap<String, String> calledFunctions = new HashMap<String, String>();
 		Iterator iter = parsedJS.entrySet().iterator();
 
 		while (iter.hasNext()) {
@@ -114,23 +117,38 @@ public class JavaScriptLintImpl implements JavaScriptLintInterface {
 			
 			//detecting declared functions using regexp and storing in data structure
 			if (currentLine.trim().matches("(.*)=(.*)function(.*)")) {
+				System.out.println("inside 1 " + currentLine);
 				String substr[] = currentLine.split("=");
 				String subsubstr[] = substr[0].split(" ");
 				declaredFunctions.put(pair.getKey().toString(), subsubstr[1]);
 			} else if (currentLine.trim().matches("function(.*)")) {
-				System.out.println("inside 2nd");
+				System.out.println("inside 2nd " + currentLine);
 				String substr[] = currentLine.split("[(]");
 				String subsubstr[] = substr[0].split(" ");
 				declaredFunctions.put(pair.getKey().toString(), subsubstr[1]);
 			} else if (currentLine.trim().matches("get (.*)") || currentLine.trim().matches("set (.*)")) {
+				System.out.println("inside 3 "+ currentLine);
 				String substr[] = currentLine.split("[(]");
 				String subsubstr[] = substr[0].split(" ");
 				declaredFunctions.put(pair.getKey().toString(), subsubstr[1]);
+			} 
+			//pattern matching to find called functions and storing them in a data structure
+			else if(Pattern.matches(".*(\050.*\051;)", currentLine.trim())){
+				//System.out.println("inside 4 " + currentLine);
+				String substr[] = currentLine.split("[(]");
+				if(substr[0].contains("=")){
+					String subsubstr[] = substr[0].trim().split("=");
+					calledFunctions.put(pair.getKey().toString(), subsubstr[1].trim());
+				}
+				else{
+					calledFunctions.put(pair.getKey().toString(),substr[0].trim());
+				}
+				
 			}
 
 		}
 
-		Iterator iter2 = declaredFunctions.entrySet().iterator();
+		Iterator iter2 = calledFunctions.entrySet().iterator();
 		while (iter2.hasNext()) {
 			Map.Entry pair = (Map.Entry) iter2.next();
 			System.out.println(pair.getKey() + " " + pair.getValue());
