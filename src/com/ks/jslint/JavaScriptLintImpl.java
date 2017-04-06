@@ -12,14 +12,13 @@ public class JavaScriptLintImpl implements JavaScriptLintInterface {
 
 	// method to detect unused variables
 	@Override
-	public void findUnusedVariables(String fileName) {
+	public void findUnusedVariables(HashMap<Integer,String> parsedJS) {
 
 		// data structure for storing declared variables
 		HashMap<String, String> variables = new HashMap<String, String>();
 		// data structure for storing all other tokens apart from variables
 		HashMap<String, Integer> tokens = new HashMap<String, Integer>();
 
-		HashMap<Integer, String> parsedJS = new JavaScriptParser().readFile(fileName);
 		// Using entrySet as HashMap does not have an iterator
 		Iterator iter = parsedJS.entrySet().iterator();
 		
@@ -84,9 +83,8 @@ public class JavaScriptLintImpl implements JavaScriptLintInterface {
 	// Method to find single-lined if else statements not enclosed in a code
 	// block
 	@Override
-	public void findSingleLinedConditionals(String fileName) {
-		HashMap<Integer, String> parsedJS = new JavaScriptParser().readFile(fileName);
-
+	public void findSingleLinedConditionals(HashMap<Integer,String> parsedJS) {
+		
 		// Using entrySet as HashMap does not have an iterator
 		Iterator iter = parsedJS.entrySet().iterator();
 		System.out.println("Please correct the following single-lined conditional statements:");
@@ -104,9 +102,8 @@ public class JavaScriptLintImpl implements JavaScriptLintInterface {
 	}
 
 	@Override
-	public void findUndeclaredFunctions(String fileName) {
+	public void findUndeclaredFunctions(HashMap<Integer,String> parsedJS) {
 
-		HashMap<Integer, String> parsedJS = new JavaScriptParser().readFile(fileName);
 		//data structure to store declared functions
 		HashMap<String, String> declaredFunctions = new HashMap<String, String>();
 		//data structure to store called functions
@@ -160,12 +157,11 @@ public class JavaScriptLintImpl implements JavaScriptLintInterface {
 
 	// Method to find unbalanced or missing braces
 	@Override
-	public void findUnbalancedBraces(String fileName) {
+	public void findUnbalancedBraces(HashMap<Integer,String> parsedJS) {
 
 		// using a stack to store the opening braces '{'
 		Stack<Character> stack = new Stack<Character>();
 
-		HashMap<Integer, String> parsedJS = new JavaScriptParser().readFile(fileName);
 		Iterator iter = parsedJS.entrySet().iterator();
 		System.out.println();
 		while (iter.hasNext()) {

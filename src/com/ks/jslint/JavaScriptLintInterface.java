@@ -1,13 +1,15 @@
 package com.ks.jslint;
 
+import java.util.HashMap;
+
 public interface JavaScriptLintInterface {
 	
-	public void findUnusedVariables(String fileName);
+	void findUnusedVariables(HashMap<Integer,String> parsedJS);
 	
-	public void findSingleLinedConditionals(String fileName);
+	void findSingleLinedConditionals(HashMap<Integer,String> parsedJS);
 	
-	public void findUndeclaredFunctions(String fileName);
+	void findUndeclaredFunctions(HashMap<Integer,String> parsedJS);
 	
-	public void findUnbalancedBraces(String fileName);	
+	void findUnbalancedBraces(HashMap<Integer,String> parsedJS);	
 
 }
