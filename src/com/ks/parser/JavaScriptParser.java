@@ -26,7 +26,10 @@ public class JavaScriptParser {
 			
 			while ((currentLine = br.readLine()) != null) {
 				lineNumber++;
-				parsedJS.put(lineNumber, currentLine);
+				if(!isComment(currentLine)){
+					parsedJS.put(lineNumber, currentLine);
+				}
+				
 			}
 			
 		}
@@ -53,6 +56,13 @@ public class JavaScriptParser {
 		
 		return parsedJS;
 
+	}
+	
+	public boolean isComment(String currentLine){
+		if(currentLine.length() > 2 &&  currentLine.trim().substring(0,2).equals("//")){
+			return true;
+		}
+		return false;
 	}
 	
 }
