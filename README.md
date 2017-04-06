@@ -26,4 +26,8 @@ ant run
 
 Reference: https://github.com/processing/processing/wiki/Build-Instructions
 
+The program takes the filename (complete path) of the javascript file as the parameter.
+eg) "D:\\user\\directory\\KS_CodingChallenge\\sample.js"
+
 The source code consists of 1 interface and 3 classes. The interface JavaScriptLintInterface contains signature of methods which are used for JavaScript validations. The class JavaScriptLintImpl implements these methods to achieve the required tasks. Another class JavaScriptParser parses the JS file to output its content line by line into a HashMap to keep track of line numbers. JSLint is the class with the main method which is the entry point of the program.
+
