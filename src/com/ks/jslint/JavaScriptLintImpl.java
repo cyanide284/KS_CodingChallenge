@@ -22,7 +22,8 @@ public class JavaScriptLintImpl implements JavaScriptLintInterface {
 		HashMap<Integer, String> parsedJS = new JavaScriptParser().readFile(fileName);
 		// Using entrySet as HashMap does not have an iterator
 		Iterator iter = parsedJS.entrySet().iterator();
-
+		
+		System.out.println("These variables are declared but unused:");
 		// parsing the code to detect and store declared variables
 		while (iter.hasNext()) {
 
@@ -74,10 +75,10 @@ public class JavaScriptLintImpl implements JavaScriptLintInterface {
 			Map.Entry pair = (Map.Entry) iter2.next();
 			// System.out.println(pair.getKey() + " " + pair.getValue());
 			if (!tokens.containsKey(pair.getKey())) {
-				System.out.println("Unused variable on line " + pair.getValue());
-			}
-
+				System.out.println("Unused variable " + pair.getKey() + " on line " + pair.getValue());
+			}			
 		}
+		System.out.println();
 	}
 
 	// Method to find single-lined if else statements not enclosed in a code
@@ -88,14 +89,15 @@ public class JavaScriptLintImpl implements JavaScriptLintInterface {
 
 		// Using entrySet as HashMap does not have an iterator
 		Iterator iter = parsedJS.entrySet().iterator();
-
+		System.out.println("Please correct the following single-lined conditional statements:");
+		System.out.println("Line Number\t Code");
 		while (iter.hasNext()) {
 			Map.Entry pair = (Map.Entry) iter.next();
 			String currentLine = pair.getValue().toString();
 			if (currentLine.contains("if") || currentLine.contains("else")) {
 				if (currentLine.trim().substring(0, 2).equals("if")
 						|| currentLine.trim().substring(0, 4).equals("else")) {
-					System.out.println(pair.getKey() + "." + " " + pair.getValue());
+					System.out.println(pair.getKey() + "\t" + pair.getValue());
 				}
 			}
 		}
@@ -165,7 +167,7 @@ public class JavaScriptLintImpl implements JavaScriptLintInterface {
 
 		HashMap<Integer, String> parsedJS = new JavaScriptParser().readFile(fileName);
 		Iterator iter = parsedJS.entrySet().iterator();
-
+		System.out.println();
 		while (iter.hasNext()) {
 			Map.Entry pair = (Map.Entry) iter.next();
 			String currentLine = pair.getValue().toString();
