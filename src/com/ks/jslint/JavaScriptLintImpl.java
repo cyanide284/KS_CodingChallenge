@@ -1,12 +1,11 @@
 package com.ks.jslint;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Stack;
 import java.util.regex.Pattern;
-
-import com.ks.parser.JavaScriptParser;
 
 public class JavaScriptLintImpl implements JavaScriptLintInterface {
 
@@ -116,6 +115,35 @@ public class JavaScriptLintImpl implements JavaScriptLintInterface {
 		HashMap<String, String> declaredFunctions = new HashMap<String, String>();
 		// data structure to store called functions
 		HashMap<String, String> calledFunctions = new HashMap<String, String>();
+		
+		System.out.println();
+		System.out.println("These are the undefined functions:");
+		
+		/*
+		 * array of keywords. might be incomplete. using array to avoid using
+		 * multiple put methods to insert into the ArrayList of keywords
+		 */
+		String apis[] = { "Audio", "clearInterval", "clearTimeout", "document", "event", "FileReader", "FormData",
+				"history", "Image", "localStorage", "location", "name", "navigator", "Option", "screen",
+				"sessionStorage", "setInterval", "setTimeout", "Storage", "XMLHttpRequest", "emit", "getRow", "isArray",
+				"log", "provides", "registerType", "require", "send", "start", "sum", "toJSON", "alert", "confirm",
+				"console", "prompt", "ArrayBuffer", "DataView", "Float32Array", "Float64Array", "Generator",
+				"GeneratorFunction", "Int8Array", "Int16Array", "Int32Array", "Intl", "Map", "Promise", "Proxy",
+				"Reflect", "Set", "Symbol", "System", "Uint8Array", "Uint8ClampedArray", "Uint16Array", "Uint32Array",
+				"WeakMap", "WeakSet", "Buffer", "clearImmediate", "clearInterval", "clearTimeout", "console", "exports",
+				"global", "module", "process", "querystring", "require", "setImmediate", "setInterval", "setTimeout",
+				"__dirname", "__filename" };
+
+		/*
+		 * data structure to store all keywords. not using normal array as I
+		 * need the method contains to check for keywords in the array
+		 */
+		ArrayList<String> keywords = new ArrayList<String>();
+
+		for (String api : apis) {
+			keywords.add(api);
+		}
+
 		Iterator iter = parsedJS.entrySet().iterator();
 
 		while (iter.hasNext()) {
@@ -129,17 +157,14 @@ public class JavaScriptLintImpl implements JavaScriptLintInterface {
 			 * "set abc()"
 			 */
 			if (currentLine.trim().matches("(.*)=(.*)function(.*)")) {
-				System.out.println("inside 1 " + currentLine);
 				String substr[] = currentLine.split("=");
 				String subsubstr[] = substr[0].split(" ");
 				declaredFunctions.put(pair.getKey().toString(), subsubstr[1]);
 			} else if (currentLine.trim().matches("function(.*)")) {
-				System.out.println("inside 2nd " + currentLine);
 				String substr[] = currentLine.split("[(]");
 				String subsubstr[] = substr[0].split(" ");
 				declaredFunctions.put(pair.getKey().toString(), subsubstr[1]);
 			} else if (currentLine.trim().matches("get (.*)") || currentLine.trim().matches("set (.*)")) {
-				System.out.println("inside 3 " + currentLine);
 				String substr[] = currentLine.split("[(]");
 				String subsubstr[] = substr[0].split(" ");
 				declaredFunctions.put(pair.getKey().toString(), subsubstr[1]);
@@ -162,6 +187,26 @@ public class JavaScriptLintImpl implements JavaScriptLintInterface {
 
 			}
 
+		}
+
+		boolean isAPI = false;
+		Iterator calledFunction = calledFunctions.entrySet().iterator();
+		while (calledFunction.hasNext()) {
+			isAPI = false;
+			Map.Entry pair = (Map.Entry) calledFunction.next();
+			for (String keyword : keywords) {
+				if (pair.getValue().toString().contains(keyword)) {
+					isAPI = true;
+					break;
+				}
+			}
+
+			if (!isAPI) {
+				if (!declaredFunctions.containsValue(pair.getValue())) {
+					System.out.println("Undefined method " + pair.getValue() + " on line " + pair.getKey());
+				}
+			}
+			// }
 		}
 
 	}
