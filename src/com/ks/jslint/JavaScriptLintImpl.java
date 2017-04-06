@@ -52,28 +52,27 @@ public class JavaScriptLintImpl implements JavaScriptLintInterface {
 					} // end of for loop
 
 				} // end of if to detect var,let,const
-				
-			//storing all other tokens/keywords in another hashmap tokens	
+
+				// storing all other tokens/keywords in another hashmap tokens
 			} else {
 				String token[] = currentLine.trim().split("=|\\.| ");
-				for(String s:token){
-					if(tokens.containsKey(s)){
-						tokens.replace(s,tokens.get(s)+1);
-					}
-					else{
+				for (String s : token) {
+					if (tokens.containsKey(s)) {
+						tokens.replace(s, tokens.get(s) + 1);
+					} else {
 						tokens.put(s, 1);
 					}
 				}
 			}
 
 		} // end of iterating over entryset
-		
-		//comparing both hashmaps and checking for unused variables
+
+		// comparing both hashmaps and checking for unused variables
 		Iterator iter2 = variables.entrySet().iterator();
 		while (iter2.hasNext()) {
 			Map.Entry pair = (Map.Entry) iter2.next();
-			//System.out.println(pair.getKey() + " " + pair.getValue());
-			if(!tokens.containsKey(pair.getKey())){
+			// System.out.println(pair.getKey() + " " + pair.getValue());
+			if (!tokens.containsKey(pair.getKey())) {
 				System.out.println("Unused variable on line " + pair.getValue());
 			}
 
@@ -103,7 +102,39 @@ public class JavaScriptLintImpl implements JavaScriptLintInterface {
 
 	@Override
 	public void findUndeclaredFunctions(String fileName) {
-		// TODO Auto-generated method stub
+
+		HashMap<Integer, String> parsedJS = new JavaScriptParser().readFile(fileName);
+		//data structure to store declared functions
+		HashMap<String, String> declaredFunctions = new HashMap<String, String>();
+		Iterator iter = parsedJS.entrySet().iterator();
+
+		while (iter.hasNext()) {
+			Map.Entry pair = (Map.Entry) iter.next();
+			String currentLine = pair.getValue().toString();
+			
+			//detecting declared functions using regexp and storing in data structure
+			if (currentLine.trim().matches("(.*)=(.*)function(.*)")) {
+				String substr[] = currentLine.split("=");
+				String subsubstr[] = substr[0].split(" ");
+				declaredFunctions.put(pair.getKey().toString(), subsubstr[1]);
+			} else if (currentLine.trim().matches("function(.*)")) {
+				System.out.println("inside 2nd");
+				String substr[] = currentLine.split("[(]");
+				String subsubstr[] = substr[0].split(" ");
+				declaredFunctions.put(pair.getKey().toString(), subsubstr[1]);
+			} else if (currentLine.trim().matches("get (.*)") || currentLine.trim().matches("set (.*)")) {
+				String substr[] = currentLine.split("[(]");
+				String subsubstr[] = substr[0].split(" ");
+				declaredFunctions.put(pair.getKey().toString(), subsubstr[1]);
+			}
+
+		}
+
+		Iterator iter2 = declaredFunctions.entrySet().iterator();
+		while (iter2.hasNext()) {
+			Map.Entry pair = (Map.Entry) iter2.next();
+			System.out.println(pair.getKey() + " " + pair.getValue());
+		}
 
 	}
 
