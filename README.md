@@ -9,20 +9,18 @@ Build Instructions:
 
 3) On Mac OS X, download and install JDK 8.
 
-4) Install Apache Ant on your system
+4) Clone the source repository from Github.
 
-5) Ant 1.8 or later is required.
-
-6) Clone the source repository from Github.
-
-7) On the command line, enter: git clone https://github.com/cyanide284/KS_CodingChallenge.git
+5) On the command line, enter: git clone https://github.com/cyanide284/KS_CodingChallenge.git
 You can probably use Git for Windows or Git for Mac instead of the command line.
 
-8) When building for the first time on Windows and Linux, you might need an internet connection, because additional files might be downloaded.
+6) When building for the first time on Windows and Linux, you might need an internet connection, because additional files might be downloaded.
 
-9) Open a terminal/console/command prompt, change to the directory where you cloned and type:
-cd build (create the build folder if it does not exist)
-ant run
+7) Open a terminal/console/command prompt, change to the directory where you cloned and type:
+javac JSLint.java
+
+8) Then type:
+java JSLint
 
 Reference: https://github.com/processing/processing/wiki/Build-Instructions
 
